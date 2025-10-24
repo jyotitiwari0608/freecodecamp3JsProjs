@@ -62,6 +62,21 @@ font-size: 2.5rem;
         <button id = "save-btn" onclick="save()">SAVE</button>
         <h3>Previous Entries : </h3>
         <h4 id = "save-el"></h4>
-        <script></script>
+        <script>
+            let countEl=document.getElementById("count-el");
+            let count=0;
+            function increament(){
+                count++;
+                countEl.innerText=count;
+            }
+            let saveEl=document.getElementById("save-el");
+            let saved = "";
+            function save(){
+                saved+=count + "-";
+                saveEl.innerText=saved;
+                count = 0;
+                countEl.innerText=count;
+            }
+        </script>
     </body>
 </html>
