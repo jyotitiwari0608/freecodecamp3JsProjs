@@ -1,1 +1,195 @@
-a small casino
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BlackJack</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1E1B4B, #2563EB);
+      color: #E0F2FE;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .game-container {
+      background: rgba(255, 255, 255, 0.06);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 20px;
+      padding: 40px 50px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(12px);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    h1 {
+      font-size: 2.6rem;
+      color: #E0F2FE;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin: 10px 0;
+    }
+
+    #result-el {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #FACC15;
+      margin-top: 16px;
+    }
+
+    .btn {
+      background: linear-gradient(to right, #38BDF8, #2563EB);
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      margin: 16px 8px 0;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn:hover {
+      background: linear-gradient(to right, #0EA5E9, #1D4ED8);
+      transform: scale(1.05);
+    }
+
+    .cards,
+    .sum,
+    .message {
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 10px;
+      color: #D1FAE5;
+    }
+
+    @media (max-width: 480px) {
+      .game-container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .btn {
+        width: 100%;
+        margin: 10px 0 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <h1>BlackJack</h1>
+    <p class="message" id="message-el">Want to play a round?</p>
+    <p class="cards" id="cards-el">Cards:</p>
+    <p class="sum" id="sum-el">Sum:</p>
+    <p id="result-el"></p>
+    <button class="btn" id="start-btn" onclick="startGame()">Start Game</button>
+    <button class="btn" onclick="newCard()">New Card</button>
+  </div>
+
+  <script>
+    function randomNumber(){
+      let x = Math.floor(Math.random()*11+1);
+      return x;
+    }
+    let startBtn = document.getElementById("start-btn");
+    let cardsEl=document.getElementById("cards-el");
+    let sumEl=document.getElementById("sum-el");
+    let cards=[];
+    let cardsElS = "Cards : ";
+    let sumElS="Sum : ";
+    let isAlive = false ;
+    let hasBlackJack = false ;
+    let messageEl=document.getElementById("message-el");
+    function printCards(){
+      let printedCards = "Cards : ";
+      for(let a = 0;a<cards.length;a++){
+        printedCards+=cards[a]+" , ";
+      }
+      return printedCards;
+    }
+    function emptyTheDeck(){
+      let a = cards.length;
+      for(let x = a-1;x>=0;x--){
+        cards.pop();
+      }
+    }
+    function sumOfDeck(){
+      let sum = 0;
+      for(let a = 0;a<cards.length;a++){
+        sum+=cards[a];
+      }
+      return sum;
+    }
+    function message(){
+      if(sumOfDeck()==21){
+        isAlive = true;
+        hasBlackJack = true;
+        return "wohoooo! BlackJack";
+      }
+      else if(sumOfDeck()<21){
+        isAlive = true ;
+        hasBlackJack = false;
+        return "want another card? tap on 'New Card' !";
+      }
+      else {
+        isAlive = false;
+        hasBlackJack = false;
+        startBtn.innerHTML = "Restart Game";
+        return "you're out of the game , restart the game!"
+      }
+    }
+    function startGame(){
+    emptyTheDeck();
+    messageEl.textContent=message();
+    cardsElS = "Cards : ";
+    sumElS="Sum : ";
+    cardsEl.textContent=cardsElS;
+    let a = randomNumber();
+    let b =randomNumber();
+    cards.push(a);
+    cards.push(b);
+    cardsElS=printCards();
+    messageEl.textContent=message();
+    cardsEl.textContent=cardsElS;
+    sumEl.textContent  = "Sum : "+sumOfDeck();
+    }
+    function newCard(){
+      messageEl.textContent=message();
+      if(isAlive == true ){
+        sumElS="Sum : ";
+      let c = randomNumber();
+      cards.push(c);
+      cardsElS = printCards();
+      messageEl.textContent=message();
+      cardsEl.textContent = cardsElS;
+      sumEl.textContent = sumEl.textContent = "Sum : "+sumOfDeck();
+      messageEl.textContent=message();
+      }
+    }
+  </script>
+</body>
+</html>
